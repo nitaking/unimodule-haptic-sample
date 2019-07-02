@@ -7,52 +7,71 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import * as Haptics from 'expo-haptics';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
 
 type Props = {};
 export default class App extends Component<Props> {
-  async _onNotificationFeedback(notificationFeedbackType) {
-    // Haptics.notificationAsync(Haptics.NotificationFeedbackType.{Success, Warning, Error})
-    await Haptics.notificationAsync(notificationFeedbackType)
+  onNotificationFeedback(notificationType) {
+    Haptics.notificationAsync(notificationType)
   }
-  onFeedbackSuccess(notificationFeedbackType) {
-    // this._onNotificationFeedback(Haptics.NotificationFeedbackType.Success)
-    Haptics.notificationAsync()
+  onImpact(impactType) {
+    Haptics.impactAsync(impactType)
   }
-  async _onImpactFeedback(impactFeedbackStyle) {
-    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.{Light, Medium, Heavy}.)
-    await Haptics.impactAsync(impactFeedbackStyle)
-  }
-  async onLightFeedback(impactFeedbackStyle) {
-    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.{Light, Medium, Heavy}.)
-    await this._onImpactFeedback(Haptics.ImpactFeedbackStyle.Light)
+  onSelection() {
+    // Haptics.selection();
+    Haptics.selectionAsync()
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
+        <Text style={styles.welcome}>Welcome to Unimodule Haptic!</Text>
+
         <TouchableOpacity
-          style={{ height: 60, width: 100, backgroundColor: 'blue', borderRadius: 50, alignItems: 'center', justifyContent: 'center'  }}
-          onPress={this.onFeedbackSuccess}
+          style={styles.greenButton}
+          onPress={this.onSelection}
         >
-          <Text style={{ color: 'white' }}>Button 1</Text>
+          <Text style={styles.outlineText}>selection</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={{ height: 60, width: 100, backgroundColor: 'red', color: 'white', borderRadius: 50, margin: 20, alignItems: 'center', justifyContent: 'center' }}
-          onPress={this.onLightFeedback}
+          style={styles.blueButton}
+          onPress={() => this.onNotificationFeedback(Haptics.NotificationFeedbackType.Success)}
         >
-          <Text style={{ color: 'white' }}>Button 2</Text>
+          <Text style={styles.outlineText}>NotificationFeedback Success</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.blueButton}
+          onPress={() => this.onNotificationFeedback(Haptics.NotificationFeedbackType.Warning)}
+        >
+          <Text style={styles.outlineText}>NotificationFeedback Warning</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.blueButton}
+          onPress={() => this.onNotificationFeedback(Haptics.NotificationFeedbackType.Error)}
+        >
+          <Text style={styles.outlineText}>NotificationFeedback Error</Text>
+        </TouchableOpacity>
+
+
+        <TouchableOpacity
+          style={styles.redButton}
+          onPress={() => this.onImpact(Haptics.ImpactFeedbackStyle.Light)}
+        >
+          <Text style={styles.outlineText}>impactAsync Light</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.redButton}
+          onPress={() => this.onImpact(Haptics.ImpactFeedbackStyle.Medium)}
+        >
+          <Text style={styles.outlineText}>impactAsync Medium</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.redButton}
+          onPress={() => this.onImpact(Haptics.ImpactFeedbackStyle.Heavy)}
+        >
+          <Text style={styles.outlineText}>impactAsync Heavy</Text>
         </TouchableOpacity>
       </View>
     );
@@ -71,9 +90,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 10,
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  blueButton: {
+    padding: 15, marginVertical: 10, backgroundColor: 'blue', borderRadius: 50, alignItems: 'center', justifyContent: 'center'
   },
+  redButton: {
+    padding: 15, marginVertical: 10, backgroundColor: 'red', borderRadius: 50, alignItems: 'center', justifyContent: 'center'
+  },
+  greenButton: {
+    padding: 15, marginVertical: 10, backgroundColor: 'green', borderRadius: 50, alignItems: 'center', justifyContent: 'center'
+  },
+  outlineText: {
+    color: 'white'
+  }
 });
